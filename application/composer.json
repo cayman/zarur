@@ -1,0 +1,15 @@
+{
+    "name": "cayman/zarur",
+    "description": "Rest api for zarur server",
+    "require": {
+        "slim/slim": "^3.0",
+        "slim/php-view": "^2.0",
+        "monolog/monolog": "^1.0",
+        "illuminate/database": "~5.0"
+    },
+    "scripts": {
+        "start": "php -S 0.0.0.0:8080 -t ../public/web/ ../public/web/index.php",
+        "test": "phpunit"
+    }
+}
+

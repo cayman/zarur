@@ -1,0 +1,29 @@
+database:
+    image: mysql
+    environment:
+        - MYSQL_DATABASE=u2262s8598_tatar
+        - MYSQL_ROOT_PASSWORD=password123
+
+
+cache:
+    image: redis
+
+server:
+    image: andrewmclagan/nginx-hhvm
+    links:
+        - database
+        - cache
+    volumes:
+        - ./server/:/var/www
+    environment:
+        - APP_ENV=production
+        - DB_DATABASE=u2262s8598_tatar
+        - DB_PASSWORD=password123
+        - VIRTUAL_HOST=
+
+load_balancer:
+    image: tutum/haproxy
+    links:
+        - server
+    ports:
+        - "8888:80"
