@@ -17,7 +17,8 @@ return [
         //
         'db' => [
             'driver' => 'mysql',
-            'host' => 'mysql1.justhost.ru',
+            'host' => '127.0.0.1',
+//            'host' => 'mysql1.justhost.ru',
             'database' => 'u2262s8598_tatar',
             'username' => 'u2262s8598_tatar',
             'password' => 'password',
