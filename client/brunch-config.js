@@ -7,12 +7,12 @@ exports.config = {
   },
 
   //use php with rest
-  server0: {
+  server: {
     command: 'php -S localhost:9000 -t ../public/r'
   },
 
   //use inner server
-  server: {
+  server1: {
     port: 9000,
     stripSlashes: true
   },

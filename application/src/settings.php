@@ -20,7 +20,7 @@ return [
             'host' => 'mysql1.justhost.ru',
             'database' => 'u2262s8598_tatar',
             'username' => 'u2262s8598_tatar',
-            'password' => '***',
+            'password' => 'password',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => 'wp_',

@@ -3,6 +3,7 @@
 
 logs
 public
+data/mysql
 **/node_modules
 **/vendor
 **/ncp-debug.log

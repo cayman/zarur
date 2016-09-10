@@ -1,29 +1,23 @@
 database:
     image: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+        - ./data/mysql:/var/lib/mysql
     environment:
+        - MYSQL_ROOT_PASSWORD=root
         - MYSQL_DATABASE=u2262s8598_tatar
-        - MYSQL_ROOT_PASSWORD=password123
+        - MYSQL_USER=u2262s8598_tatar
+        - MYSQL_PASSWORD=password
 
-
-cache:
-    image: redis
-
-server:
-    image: andrewmclagan/nginx-hhvm
+phpmyadmin:
+    image: nazarpc/phpmyadmin
     links:
         - database
-        - cache
-    volumes:
-        - ./server/:/var/www
-    environment:
-        - APP_ENV=production
-        - DB_DATABASE=u2262s8598_tatar
-        - DB_PASSWORD=password123
-        - VIRTUAL_HOST=
-
-load_balancer:
-    image: tutum/haproxy
-    links:
-        - server
     ports:
-        - "8888:80"
+        - "9999:80"
+    environment:
+        - MYSQL_HOST=database:3306
+        - MYSQL_ROOT_PASSWORD=root
+
+
