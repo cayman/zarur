@@ -9,7 +9,7 @@ const store = createStore(counterApp, module.hot && module.hot.data && module.ho
 
 if (module.hot) {
   module.hot.accept('./reducers', () => {
-    store.replaceReducer(require('./reducers').default);
+    store.replaceReducer(require('./reducers').default); // eslint-disable-line global-require
   });
   module.hot.accept();
 

@@ -1,21 +1,18 @@
 exports.config = {
   hot: true,
 
-
   paths: {
     public: '../public/r'
   },
 
-  //use php with rest
-  server: {
-    command: 'php -S localhost:9000 -t ../public/r'
-  },
-
   //use inner server
-  server1: {
+  server: {
     port: 9000,
+    //path: 'rest-proxy.js', //use server with rest-proxy
+    command: 'php -S localhost:9000 -t ../public/r', //use php with rest
     stripSlashes: true
   },
+
 
   files: {
     javascripts: { joinTo: 'zarur.js'  },
@@ -23,11 +20,13 @@ exports.config = {
   },
 
   plugins: {
-    babel: { presets: ['es2015', 'react'] },
+    babel: {
+      presets: ['es2015', 'react'] ,
+      plugins: ['transform-runtime']
+    },
     eslint: {
       pattern: /^app\/.*\.js?$/,
-      warnOnly: true,
-      config: {rules: {'array-callback-return': 'warn'}}
+      warnOnly: true
     },
     sass: {
       modules: true
