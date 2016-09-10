@@ -17,12 +17,6 @@ exports.config = {
     stripSlashes: true
   },
 
-  //use proxy server
-  server2: {
-    path: 'server.js',
-    run: true
-  },
-
   files: {
     javascripts: { joinTo: 'zarur.js'  },
     stylesheets: { joinTo: 'zarur.css' }
@@ -44,7 +38,7 @@ exports.config = {
     production: {
       sourceMaps: true
     }
-  },
+  }
 
 
 };
