@@ -11,13 +11,14 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/api/posts', function (Request $request, Response $response, $args) {
 
-    $posts = $this->db->table('posts')->take(20)->get();
+    $posts = $this->db->table('posts')
+        ->where('post_type','post')->take(20)->get();
 
     $count = count($posts);
 
     $this->logger->info("Posts count = $count");
 
-    $data = array('posts'=>'api','count'=>$count,'items'=> $posts);
+    $data = array('total'=>100,'count'=>$count,'items'=> $posts);
 
     return $response->withJson($data);
 });
@@ -28,7 +29,7 @@ $app->get('/api/posts/{id}', function (Request $request, Response $response, $ar
 
     $id = $request->getAttribute('id');
 
-    $post = $this->db->table('posts')->where('id',$id)->get();
+    $post = $this->db->table('posts')->find($id);
 
     $this->logger->info("Post id =  $id");
 

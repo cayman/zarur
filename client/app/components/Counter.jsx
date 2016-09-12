@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-const BaseCounter = ({ count, onPlusClick, onMinusClick }) => (
+const CounterView = ({ count, onPlusClick, onMinusClick }) => (
   <div>
     <h2>Redux Counter:</h2>
     <p>
@@ -12,14 +12,16 @@ const BaseCounter = ({ count, onPlusClick, onMinusClick }) => (
   </div>
 );
 
-BaseCounter.propTypes = {
+CounterView.propTypes = {
   count: PropTypes.number.isRequired,
   onPlusClick: PropTypes.func.isRequired,
   onMinusClick: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
-  return { count: state };
+  return {
+    count: state.count
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -29,4 +31,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BaseCounter)
+export default connect(mapStateToProps, mapDispatchToProps)(CounterView)
