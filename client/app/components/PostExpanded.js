@@ -4,19 +4,34 @@ import {openNextPost} from "../actions/posts";
 import {openPrevPost} from "../actions/posts";
 import {closePost} from "../actions/posts";
 
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
+
 
 const PostExpanded = ({ id, title, date, content, onNextClick, onPrevClick, onCloseClick})=> (
-  <section>
-    <h4>{title} (<a onClick={() => onCloseClick(id)}>Close</a>)</h4>
-    <h5>{date}</h5>
-    <div>
-       {content}
-    </div>
-    <div>
-      <span onClick={() => onPrevClick(id)}>prev</span>
-      <span onClick={() => onNextClick(id)}>next</span>
-    </div>
-  </section>
+  <Paper zDepth={3}>
+    <Card initiallyExpanded = {true}>
+      <CardTitle
+        title={title}
+        subtitle={date}
+        actAsExpander={true}
+        showExpandableButton={true}
+        onClick = { () => onCloseClick(id) }/>
+
+      <CardText>
+        {content}
+      </CardText>
+
+    <CardActions>
+      <FlatButton label="<="
+                  onClick={() => onPrevClick(id) }/>
+      <FlatButton label="=>"
+                  onClick={() => onNextClick(id) }/>
+    </CardActions>
+  </Card>
+  </Paper>
+
 );
 
 PostExpanded.propTypes = {
@@ -40,12 +55,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     onNextClick: (id) => dispatch(openNextPost(id)),
     onPrevClick: (id) => dispatch(openPrevPost(id)),
     onCloseClick: (id) => dispatch(closePost(id)),
-  };
-};
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostExpanded)

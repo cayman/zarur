@@ -1,11 +1,23 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import {openPost} from "../actions/posts";
+import {openPost} from '../actions/posts';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
-const PostCollapsed = ({ id, title, date, content, onOpenClick})=> (
-  <section>
-    <h4><a onClick={() => onOpenClick(id)}>{date} - {title}</a></h4>
-  </section>
+
+import Paper from 'material-ui/Paper';
+
+const PostCollapsed = ({ id, title, date, onOpenClick})=> (
+  <Paper>
+    <Card>
+      <CardHeader
+        title={title}
+        subtitle={date}
+        actAsExpander={true}
+        showExpandableButton={true}
+        onClick = {() => onOpenClick(id) }
+      />
+      </Card>
+  </Paper>
 );
 
 PostCollapsed.propTypes = {
@@ -25,10 +37,8 @@ const mapStateToProps = (state, props) => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     onOpenClick: (id) => dispatch(openPost(id)),
-  };
-};
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostCollapsed)

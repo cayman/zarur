@@ -1,19 +1,20 @@
 import 'babel-polyfill';
 import ReactDOM from 'react-dom';
 import React from 'react';
+import { Provider } from 'react-redux';
 // import { Router, Route, browserHistory } from 'react-router';
 
-import { Provider } from 'react-redux';
-
 import { createStore, applyMiddleware, compose} from 'redux';
-
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import createLogger from 'redux-logger';
 
-import rootReducer from './reducers';
 import App from 'components/App';
+import rootReducer from './reducers';
+import {fetchPosts} from "./actions/posts";
+import {fetchTaxonomy} from "./actions/taxonomy";
 
+var injectTapEventPlugin = require("react-tap-event-plugin");
 
 const middlewares = [thunk,promise];
 let devtool;
@@ -42,6 +43,9 @@ const store = createStore(
     applyMiddleware(...middlewares)
 );
 
+store.dispatch(fetchPosts());
+store.dispatch(fetchTaxonomy());
+
 
 if (module.hot) {
   module.hot.accept('./reducers', () => {
@@ -66,8 +70,11 @@ const load = () => {
   );
 };
 
+injectTapEventPlugin();
+
 if (document.readyState !== 'complete') {
   document.addEventListener('DOMContentLoaded', load);
 } else {
+
   load();
 }

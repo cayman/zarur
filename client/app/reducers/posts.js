@@ -4,7 +4,7 @@ import {REQUEST_POST} from "../actions/posts";
 import {RECEIVE_POST} from "../actions/posts";
 import {CLOSE_POST} from "../actions/posts";
 
-export default function posts(state = { items:[], item: null , page: 0 },action){
+export default function posts(state = { items:[], item: null , page: 0, term: 0 },action){
 
   switch(action.type){
     case REQUEST_POSTS:
@@ -12,6 +12,8 @@ export default function posts(state = { items:[], item: null , page: 0 },action)
 
     case RECEIVE_POSTS:
       return { ...state,
+        term: action.term || '0',
+        page: state.page || action.page,
         items: action.data.items,
         total: action.data.total,
         count: action.data.count,

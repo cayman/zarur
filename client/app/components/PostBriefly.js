@@ -1,14 +1,31 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import {openPost} from "../actions/posts";
+import {openPost} from '../actions/posts';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
 
 const PostBriefly = ({ id, title, date, content, onOpenClick})=> (
-  <section>
-    <h4><a onClick={() => onOpenClick(id)}>{date} - {title}</a></h4>
-    <div>
-       {content}
-    </div>
-  </section>
+  <Paper zDepth={3}>
+    <Card>
+      <CardHeader
+        title={title}
+        subtitle={date}
+        actAsExpander={true}
+        showExpandableButton={true}
+        onClick = {() => onOpenClick(id) }
+      />
+       <CardText>
+         {content}
+       </CardText>
+
+      <CardActions>
+        <FlatButton label="Укырга" primary={true}
+                    onClick={() => onOpenClick(id) }/>
+        <FlatButton label="Язырка"  />
+      </CardActions>
+    </Card>
+  </Paper>
 );
 
 PostBriefly.propTypes = {
@@ -30,10 +47,8 @@ const mapStateToProps = (state, props) => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     onOpenClick: (id) => dispatch(openPost(id)),
-  };
-};
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostBriefly)

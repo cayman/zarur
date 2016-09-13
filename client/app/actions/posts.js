@@ -1,33 +1,26 @@
-import fetch from 'isomorphic-fetch';
+import * as api from "../api";
 
-export const REQUEST_POSTS = 'REQUEST_POSTS';
-export const REQUEST_POST = 'REQUEST_POST';
-export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-export const RECEIVE_POST = 'RECEIVE_POST';
-export const CLOSE_POST = 'CLOSE_POST';
-
-const catParam = (param,value) => value ? `?${param}=${value}` : '';
-
-export const fetchPosts = (page, category) => dispatch => {
-     dispatch(requestPosts(page,category));
-     return fetch('/api/posts' + catParam(category))
-       .then(r=>r.json())
-       .then(data=>dispatch(receivePosts(data)))
+export const fetchPosts = (term=0,page=1) => dispatch => {
+     dispatch(requestPosts(page,term));
+     return api.get('posts',{term,page}).then(data=>dispatch(receivePosts(page, term, data)))
   };
 
-export const fetchNextPosts = (page, category) => {};
-export const fetchPrevPosts = (page, category) => {};
+export const fetchNextPosts = (page, term) => {};
+export const fetchPrevPosts = (page, term) => {};
 
 
-
-export const requestPosts = (page, category) => ({
+export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const requestPosts = (page, term) => ({
   type: REQUEST_POSTS,
   page,
-  category
+  term
 });
 
-export const receivePosts = (data) => ({
+export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const receivePosts = (page, term, data) => ({
   type: RECEIVE_POSTS,
+  page,
+  term,
   data
 });
 
@@ -35,25 +28,27 @@ export const receivePosts = (data) => ({
 
 export const openPost = (id) =>  dispatch => {
   dispatch(requestPost(id));
-  return fetch('/api/posts/' + id)
-    .then(r=>r.json())
-    .then(data=>dispatch(receivePost(data)))
+  return api.get('posts/' + id).then(data=>dispatch(receivePost(data)))
 };
-export const closePost = (id) => ({
-  type: CLOSE_POST,
-  id
-});
 
+
+export const REQUEST_POST = 'REQUEST_POST';
 export const requestPost = (id) => ({
   type: REQUEST_POST,
   id
 });
 
+export const RECEIVE_POST = 'RECEIVE_POST';
 export const receivePost = (data) => ({
   type: RECEIVE_POST,
   data
 });
 
+export const CLOSE_POST = 'CLOSE_POST';
+export const closePost = (id) => ({
+  type: CLOSE_POST,
+  id
+});
 
 export const openNextPost = (id) => {};
 export const openPrevPost = (id) => {};

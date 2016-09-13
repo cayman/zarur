@@ -4,12 +4,20 @@ import { connect } from 'react-redux';
 import PostBriefly from './PostBriefly';
 import PostCollapsed from './PostCollapsed';
 import PostExpanded from './PostExpanded';
+import Paper from 'material-ui/Paper';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+
 
 import {fetchPosts,fetchNextPosts,fetchPrevPosts} from "../actions/posts";
 
-const PostsView = ({ posts, page, expandedId,  isLast,  onLoadClick, onOpenClick, onNextClick, onPrevClick})=> (
+const PostsView = ({ categories, posts, term, page, expandedId,  isLast,  onLoadClick, onOpenClick, onNextClick, onPrevClick})=> (
   <section>
-    <h4>Список постов <span onClick={() => onLoadClick(page)}>(LOAD)</span></h4>
+    <DropDownMenu value={term} onChange={(event,key) => onLoadClick(key,page)}>
+      <MenuItem  value='0' primaryText='Главная' />
+      { categories.map(item => <MenuItem key={item.term_id} value={item.term_taxonomy_id} primaryText={item.name} />) }
+    </DropDownMenu>
+
     { posts.map(post => !expandedId ?
       <PostBriefly key={post.ID} post = {post} onClick={() => onOpenClick(post.ID)} /> :
       ( post.ID === expandedId ?
@@ -26,6 +34,8 @@ const PostsView = ({ posts, page, expandedId,  isLast,  onLoadClick, onOpenClick
 
 PostsView.propTypes = {
   page:  PropTypes.number.isRequired,
+  term:  PropTypes.number.isRequired,
+  categories:  PropTypes.array.isRequired,
   isLast:  PropTypes.bool.isRequired,
   posts: PropTypes.array.isRequired,
   openedId:  PropTypes.number,
@@ -40,19 +50,19 @@ PostsView.propTypes = {
 const mapStateToProps = (state) => {
   return {
     page: state.posts.page,
+    term: state.posts.term,
+    categories: state.taxonomy.items.category || [],
     isLast: false,
     posts: state.posts.items,
     expandedId: state.posts.item ? state.posts.item.ID : undefined,
   }
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onLoadClick: (page) => dispatch(fetchPosts(page)),
+const mapDispatchToProps = dispatch => ({
+    onLoadClick: (term, page) => dispatch(fetchPosts(term, page)),
     onNextClick: (page) => dispatch(fetchNextPosts(page)),
     onPrevClick: (page) => dispatch(fetchPrevPosts(page)),
-    onOpenClick: (id) => dispatch(fetchPost(id))
-  };
-};
+    onOpenClick: (id) => dispatch(fetchPost(id,term))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsView)

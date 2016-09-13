@@ -24,11 +24,9 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     onPlusClick: () => dispatch({ type: 'INCREMENT' }),
     onMinusClick: () => dispatch({ type: 'DECREMENT' })
-  };
-};
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(CounterView)
