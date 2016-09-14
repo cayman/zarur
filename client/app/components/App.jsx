@@ -15,7 +15,6 @@ export default class App extends React.Component {
       <MuiThemeProvider>
         <div id="content">
           <AppBar title="Туган тел"
-            iconClassNameRight="muidocs-icon-navigation-expand-more"
           />
           <Posts />
           <Bottom/>

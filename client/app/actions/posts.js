@@ -1,27 +1,18 @@
 import * as api from "../api";
 
-export const fetchPosts = (term=0,page=1) => dispatch => {
-     dispatch(requestPosts(page,term));
-     return api.get('posts',{term,page}).then(data=>dispatch(receivePosts(page, term, data)))
+export const fetchPosts = (taxonomyId,page=1) => dispatch => {
+     dispatch(requestPosts(taxonomyId,page));
+     return api.get('posts',{taxonomyId,page}).then(data=>dispatch(receivePosts(taxonomyId,page,data)))
   };
 
-export const fetchNextPosts = (page, term) => {};
-export const fetchPrevPosts = (page, term) => {};
-
-
 export const REQUEST_POSTS = 'REQUEST_POSTS';
-export const requestPosts = (page, term) => ({
-  type: REQUEST_POSTS,
-  page,
-  term
+export const requestPosts = (taxonomyId,page) => ({
+  type: REQUEST_POSTS, taxonomyId, page
 });
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-export const receivePosts = (page, term, data) => ({
-  type: RECEIVE_POSTS,
-  page,
-  term,
-  data
+export const receivePosts = (taxonomyId, page, data) => ({
+  type: RECEIVE_POSTS, taxonomyId, page, data
 });
 
 

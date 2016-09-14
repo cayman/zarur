@@ -9,6 +9,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+
 $app->get('/api/taxonomy', function (Request $request, Response $response, $args) {
 
     $terms = $this->db->table('term_taxonomy')
@@ -25,23 +26,29 @@ $app->get('/api/taxonomy', function (Request $request, Response $response, $args
 
 $app->get('/api/posts', function (Request $request, Response $response, $args) {
 
-    $term = $request->getAttribute('term');
-    $page = $request->getAttribute('page');
+    $taxonomyId = $request->getQueryParam('taxonomyId');
+    $page = $request->getQueryParam('page',1);
+    $perPage = $request->getQueryParam('count',20);
 
-    $posts = $this->db->table('posts')
-        ->when($term>0, function ($query) use ($term) {
-           return $query->join('term_relationships','term_relationships.object_id','=','posts.ID')
-                ->where('term_relationships.taxonomy_term_id',$term);
+    $taxonomy = isset($taxonomyId) ? $this->db->table('term_taxonomy')
+        ->join('terms', 'terms.term_id', '=', 'term_taxonomy.term_id')
+        ->where('term_taxonomy.term_taxonomy_id', $taxonomyId)->first() : null;
+
+    $query = $this->db->table('posts')
+        ->when(isset($taxonomyId),function($query) use ($taxonomyId) {
+            return $query->join('term_relationships', 'term_relationships.object_id', '=', 'posts.ID')
+                ->where('term_relationships.term_taxonomy_id', $taxonomyId);
         })
-        ->where('posts.post_type','post')
-        ->limit(20)
-          ->get();
+        ->where('posts.post_type', 'post');
 
-    $count = count($posts);
+    $total = $query->count();
 
-    $this->logger->info("Posts count = $count");
+    $posts = $query->orderBy('ID', 'desc')->offset(($page-1)*$perPage)->limit($perPage)->get();
 
-    $data = array('total'=>100,'count'=>$count,'items'=> $posts);
+
+    $this->logger->info("Posts count = $total");
+
+    $data = array('total'=>$total, 'perPage'=>$perPage, 'page'=> $page, 'taxonomy' => $taxonomy, 'items'=> $posts);
 
     return $response->withJson($data);
 });

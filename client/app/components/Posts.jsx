@@ -4,19 +4,26 @@ import { connect } from 'react-redux';
 import PostBriefly from './PostBriefly';
 import PostCollapsed from './PostCollapsed';
 import PostExpanded from './PostExpanded';
+import Paginator from './Paginator';
+import Categories from './Categories';
+
 import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
 
 
-import {fetchPosts,fetchNextPosts,fetchPrevPosts} from "../actions/posts";
+import {openPost} from "../actions/posts";
 
-const PostsView = ({ categories, posts, term, page, expandedId,  isLast,  onLoadClick, onOpenClick, onNextClick, onPrevClick})=> (
+const PostsView = ({ term, taxonomyId, total, page, posts, lastPage, expandedId,  onOpenClick})=> (
   <section>
-    <DropDownMenu value={term} onChange={(event,key) => onLoadClick(key,page)}>
-      <MenuItem  value='0' primaryText='Главная' />
-      { categories.map(item => <MenuItem key={item.term_id} value={item.term_taxonomy_id} primaryText={item.name} />) }
-    </DropDownMenu>
+
+    { term ? <h4>Булек архивы:{ term } ({ total })</h4> : '' }
+
+    <Categories/>
+    <h5>  {page} - {lastPage} </h5>
+
+    <Paginator/>
 
     { posts.map(post => !expandedId ?
       <PostBriefly key={post.ID} post = {post} onClick={() => onOpenClick(post.ID)} /> :
@@ -25,44 +32,43 @@ const PostsView = ({ categories, posts, term, page, expandedId,  isLast,  onLoad
           <PostCollapsed key={post.ID} post = {post} onClick={() => onOpenClick(post.ID)} />
       )
     )}
-    <div>
-      { page>0 ? <span onClick={() => onPrevClick(page)}>prev</span> : '' }
-      { isLast ? <span onClick={() => onNextClick(page)}>next</span> : '' }
-    </div>
+
+    <Paginator/>
+
   </section>
 );
 
 PostsView.propTypes = {
-  page:  PropTypes.number.isRequired,
-  term:  PropTypes.number.isRequired,
-  categories:  PropTypes.array.isRequired,
-  isLast:  PropTypes.bool.isRequired,
+  taxonomyId:  PropTypes.string,
+  term:  PropTypes.string.isRequired,
   posts: PropTypes.array.isRequired,
-  openedId:  PropTypes.number,
-  onLoadClick: PropTypes.func.isRequired,
-  onOpenClick: PropTypes.func.isRequired,
-  onNextClick: PropTypes.func.isRequired,
-  onPrevClick: PropTypes.func.isRequired
 
+  total:  PropTypes.number,
+  page:  PropTypes.number.isRequired,
+  lastPage:  PropTypes.number,
+
+  expandedId:  PropTypes.number,
+
+  onOpenClick: PropTypes.func.isRequired,
 };
 
 
 const mapStateToProps = (state) => {
   return {
-    page: state.posts.page,
-    term: state.posts.term,
-    categories: state.taxonomy.items.category || [],
-    isLast: false,
+    taxonomyId: state.posts.taxonomy ? state.posts.taxonomy.term_taxonomy_id : null,
+    term: state.posts.taxonomy ? state.posts.taxonomy.name : 'Главная страница',
     posts: state.posts.items,
+
+    total: state.posts.total,
+    page: state.posts.page,
+    lastPage: state.posts.lastPage,
+
     expandedId: state.posts.item ? state.posts.item.ID : undefined,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
-    onLoadClick: (term, page) => dispatch(fetchPosts(term, page)),
-    onNextClick: (page) => dispatch(fetchNextPosts(page)),
-    onPrevClick: (page) => dispatch(fetchPrevPosts(page)),
-    onOpenClick: (id) => dispatch(fetchPost(id,term))
+    onOpenClick: (id) => dispatch(openPost(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsView)
