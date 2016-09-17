@@ -17,11 +17,10 @@ return [
         //
         'db' => [
             'driver' => 'mysql',
-            'host' => '127.0.0.1',
-//            'host' => 'mysql1.justhost.ru',
-            'database' => 'u2262s8598_tatar',
-            'username' => 'u2262s8598_tatar',
-            'password' => 'password',
+            'host' => getenv('DBP_HOST'),
+            'database' => getenv('DBP_NAME'),
+            'username' => getenv('DBP_USER'),
+            'password' => getenv('DBP_PASSWORD'),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => 'wp_',

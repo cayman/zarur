@@ -6,23 +6,31 @@
  * Time: 18:00
  */
 
+define('APP_DIR', '/../application');
+define('APP_PATH', file_exists(__DIR__.APP_DIR) ? __DIR__.APP_DIR : __DIR__.'/..'.APP_DIR);
 
-define('APPLICATION_PATH', __DIR__ . '/../../application');
 
-require APPLICATION_PATH . '/vendor/autoload.php';
+require APP_PATH . '/vendor/autoload.php';
+
+
+$dotenv = new Dotenv\Dotenv();
+if (file_exists(__DIR__.'/../.etc'))
+    $dotenv->load(__DIR__.'/..');
+else if(file_exists(APP_PATH.'/.etc'))
+    $dotenv->load(APP_PATH);
 
 
 session_start();
 // Instantiate the app
-$settings = require APPLICATION_PATH . '/src/settings.php';
+$settings = require APP_PATH . '/src/settings.php';
 
 $app = new \Slim\App($settings);
 
 // Set up dependencies
-require APPLICATION_PATH . '/src/dependencies.php';
+require APP_PATH . '/src/dependencies.php';
 // Register middleware
-require APPLICATION_PATH . '/src/middleware.php';
+require APP_PATH . '/src/middleware.php';
 // Register routes
-require APPLICATION_PATH . '/src/routes.php';
+require APP_PATH . '/src/routes.php';
 
 $app->run();

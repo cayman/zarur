@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "brunch watch --server",
-    "prod": "brunch build --production"
+    "prod": "brunch build --production",
+    "watch": "brunch watch"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",

@@ -5,7 +5,8 @@
         "slim/slim": "^3.0",
         "slim/php-view": "^2.0",
         "monolog/monolog": "^1.0",
-        "illuminate/database": "~5.0"
+        "illuminate/database": "~5.0",
+        "vlucas/phpdotenv": "~2.0"
     },
     "scripts": {
         "start": "php -S localhost:9000 -t ../public/r/ ../public/r/index.php",

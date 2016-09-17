@@ -1,4 +1,4 @@
-const target = '../public/r/';
+const target = '../public/';
 
 exports.config = {
   hot: true,

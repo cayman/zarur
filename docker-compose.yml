@@ -1,36 +1,55 @@
-database:
+mysql-db:
     image: mysql
     ports:
       - "3306:3306"
     volumes:
         - ./data/mysql:/var/lib/mysql
+        - ./etc/mysql:/docker-entrypoint-initdb.d
     environment:
-        - MYSQL_ROOT_PASSWORD=root
-        - MYSQL_DATABASE=u2262s8598_tatar
-        - MYSQL_USER=u2262s8598_tatar
-        - MYSQL_PASSWORD=password
+        - MYSQL_ROOT_PASSWORD=${DBP_ROOT}
+        - MYSQL_DATABASE=${DBP_NAME}
+        - MYSQL_USER=${DBP_USER}
+        - MYSQL_PASSWORD=${DBP_PASSWORD}
 
-phpmyadmin:
+php-myadmin:
     image: nazarpc/phpmyadmin
     links:
-        - database
+        - mysql-db
     ports:
         - "9999:80"
     environment:
-        - MYSQL_HOST=database:3306
-        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_HOST=mysql-db:3306
+        - MYSQL_ROOT_PASSWORD=${DBP_ROOT}
 
 
-sever:
-    image: php:5.6-apache
+php-server:
+    build: .
+    dockerfile: /etc/docker/Dockerfile-php-apache
     links:
-        - mysql
+        - mysql-db
     ports:
-        - "9000:80"
+        - "8000:80"
+        - "8080:8080"
     volumes:
-        - ./public/r/:/var/www
+        - ./public:/var/www/html
+        - ./application:/var/www/application
+#        - ./logs:/var/www/logs
+        - ./etc/php:/usr/local/etc/php
+#        - ./etc/apache:/etc/apache2/sites-enabled
     environment:
-        - MYSQL_HOST=database:3306
-        - MYSQL_ROOT_PASSWORD=root
+        - ALLOW_OVERRIDE=true
+        - DBP_HOST=${DBP_HOST}
+        - DBP_NAME=${DBP_NAME}
+        - DBP_USER=${DBP_USER}
+        - DBP_PASSWORD=${DBP_PASSWORD}
 
-
+#
+#brunch:
+#    build: .
+#    dockerfile: /etc/docker/Dockerfile-node
+#    volumes:
+#        - ./public:/usr/public
+#        - ./client:/usr/app
+#    environment:
+#        - ALLOW_OVERRIDE=true
+#    command: ["/bin/sh", "-c", "npm install && bower install --allow-root && npm run watch"]
