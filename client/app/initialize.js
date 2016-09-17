@@ -70,11 +70,11 @@ const load = () => {
   );
 };
 
-injectTapEventPlugin();
+
 
 if (document.readyState !== 'complete') {
   document.addEventListener('DOMContentLoaded', load);
 } else {
-
+  injectTapEventPlugin();
   load();
 }
