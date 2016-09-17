@@ -14,10 +14,19 @@ require APP_PATH . '/vendor/autoload.php';
 
 
 $dotenv = new Dotenv\Dotenv();
-if (file_exists(__DIR__.'/../.etc'))
-    $dotenv->load(__DIR__.'/..');
-else if(file_exists(APP_PATH.'/.etc'))
+if (file_exists(__DIR__.'/../.etc')) {
+    $dotenv->load(__DIR__ . '/..');
+    echo getenv(__DIR__ . '/..');
+}
+else if(file_exists(APP_PATH.'/.etc')){
     $dotenv->load(APP_PATH);
+    echo getenv(APP_PATH.'/.etc');
+}
+
+echo getenv('DBP_HOST');
+echo getenv('DBP_NAME');
+echo getenv('DBP_USER');
+echo getenv('DBP_PASSWORD');
 
 
 session_start();
