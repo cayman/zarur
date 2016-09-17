@@ -28,31 +28,52 @@ php-server:
     links:
         - mysql-db
     ports:
-        - "8000:80"
-        - "8080:8080"
+        - "9000:80"
     volumes:
-        - ./public:/var/www/html
+        - ./client/public:/var/www/html
         - ./application:/var/www/application
 #        - ./logs:/var/www/logs
         - ./etc/php:/usr/local/etc/php
 #        - ./etc/apache:/etc/apache2/sites-enabled
+        - ./etc/apache/httpd.conf:/etc/apache2/conf-enabled/apache2.conf
     environment:
         - ALLOW_OVERRIDE=true
+        - APP_PATH=/var/www/application
         - DBP_HOST=mysql-db
         - DBP_NAME=${DBP_NAME}
         - DBP_USER=${DBP_USER}
         - DBP_PASSWORD=${DBP_PASSWORD}
 
 
-brunch:
+node-brunch:
     build: .
     dockerfile: /etc/docker/Dockerfile-brunch
+
+    ports:
+        - "9090:80"
+        - "9485-9495:9485-9495"
     volumes:
-        - ./public:/usr/public
+        - ./client/public:/usr/client/public
         - ./client/app:/usr/client/app
         - ./client/package.json:/usr/client/package.json
         - ./client/.eslintrc.yml:/usr/client/.eslintrc.yml
         - ./client/brunch-config.js:/usr/client/brunch-config.js
     environment:
         - ALLOW_OVERRIDE=true
-    command: ["/bin/sh", "-c", "npm run watch"]
+        - HOST_HOSTNAME=brunch-server
+    command: brunch watch --server --port 80
+
+
+proxy:
+    image: haproxy:1.6
+    links:
+        - node-brunch
+        - php-server
+    ports:
+      - "80:8080"
+
+    volumes:
+        - ./etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+        - ./logs/haproxy:/var/log/haproxy
+    environment:
+        - ALLOW_OVERRIDE=true

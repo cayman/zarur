@@ -10,7 +10,9 @@
   },
   "scripts": {
     "start": "brunch watch --server",
-    "prod": "brunch build --production",
+    "prod": "brunch watch --env --production",
+    "docker": "brunch watch --env docker",
+    "local": "brunch watch -e local --server",
     "watch": "brunch watch"
   },
   "dependencies": {

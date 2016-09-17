@@ -6,10 +6,9 @@
  * Time: 18:00
  */
 
+define('APP_PATH', getenv('APP_PATH') ?: __DIR__.'/../../application');
 
-define('APP_PATH', __DIR__. ('production' == getenv('APP_ENV') ? '/../../application' : '/../application'));
-
-require APP_PATH . '/vendor/autoload.php';;
+require APP_PATH . '/vendor/autoload.php';
 
 
 session_start();

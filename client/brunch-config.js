@@ -1,18 +1,11 @@
-const target = '../public/';
-
 exports.config = {
   hot: true,
 
-  paths: {
-    public: target,
-  },
-
   //use inner server
   server: {
-    port: 9000,
-    //path: 'rest-proxy.js', //use server with rest-proxy
-    command: 'php -S localhost:9000 -t ' + target, //use php with rest
-    stripSlashes: true
+    port: 8000,
+    stripSlashes: true,
+    hostname:  '0.0.0.0'
   },
 
 
@@ -37,9 +30,24 @@ exports.config = {
 
   overrides: {
     production: {
-      sourceMaps: true
+      sourceMaps: false
+    },
+    local: {
+      server: {
+        command: 'php -S localhost:8000 -t public', //use php with rest
+        stripSlashes: true
+      },
+    },
+    proxy:{
+      server: {
+        path: 'rest-proxy.js', //use server with rest-proxy
+        stripSlashes: true
+      },
+
     }
   }
+
+
 
 
 };
