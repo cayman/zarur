@@ -1,9 +1,0 @@
-FROM node:6.6
-
-RUN npm install -g brunch bower
-
-RUN mkdir -p /usr/app
-
-WORKDIR /usr/app
-
-RUN npm install -g brunch bower

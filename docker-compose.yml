@@ -43,13 +43,16 @@ php-server:
         - DBP_USER=${DBP_USER}
         - DBP_PASSWORD=${DBP_PASSWORD}
 
-#
-#brunch:
-#    build: .
-#    dockerfile: /etc/docker/Dockerfile-node
-#    volumes:
-#        - ./public:/usr/public
-#        - ./client:/usr/app
-#    environment:
-#        - ALLOW_OVERRIDE=true
-#    command: ["/bin/sh", "-c", "npm install && bower install --allow-root && npm run watch"]
+
+brunch:
+    build: .
+    dockerfile: /etc/docker/Dockerfile-brunch
+    volumes:
+        - ./public:/usr/public
+        - ./client/app:/usr/client/app
+        - ./client/package.json:/usr/client/package.json
+        - ./client/.eslintrc.yml:/usr/client/.eslintrc.yml
+        - ./client/brunch-config.js:/usr/client/brunch-config.js
+    environment:
+        - ALLOW_OVERRIDE=true
+    command: ["/bin/sh", "-c", "npm run watch"]
