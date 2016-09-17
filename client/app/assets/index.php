@@ -6,30 +6,14 @@
  * Time: 18:00
  */
 
-define('APP_DIR', '/../application');
-define('APP_PATH', file_exists(__DIR__.APP_DIR) ? __DIR__.APP_DIR : __DIR__.'/..'.APP_DIR);
 
+define('APP_PATH', __DIR__. ('production' == getenv('APP_ENV') ? '/../../application' : '/../application'));
 
-require APP_PATH . '/vendor/autoload.php';
-
-
-$dotenv = new Dotenv\Dotenv();
-if (file_exists(__DIR__.'/../.etc')) {
-    $dotenv->load(__DIR__ . '/..');
-    echo getenv(__DIR__ . '/..');
-}
-else if(file_exists(APP_PATH.'/.etc')){
-    $dotenv->load(APP_PATH);
-    echo getenv(APP_PATH.'/.etc');
-}
-
-echo getenv('DBP_HOST');
-echo getenv('DBP_NAME');
-echo getenv('DBP_USER');
-echo getenv('DBP_PASSWORD');
+require APP_PATH . '/vendor/autoload.php';;
 
 
 session_start();
+
 // Instantiate the app
 $settings = require APP_PATH . '/src/settings.php';
 

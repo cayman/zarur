@@ -1,4 +1,13 @@
 <?php
+
+$envDir = 'production' == getenv('APP_ENV') ? __DIR__.'/..' : __DIR__.'/../..';
+
+$dotenv = new Dotenv\Dotenv($envDir);
+
+if(file_exists($envDir.'/.env')) {
+    $dotenv->load();
+}
+
 return [
     'settings' => [
         'displayErrorDetails' => true, // set to false in production

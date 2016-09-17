@@ -4,7 +4,10 @@
 logs
 public
 data/mysql
-data/sql
+etc/mysql
+
+application/.etc
+
 **/node_modules
 **/vendor
 **/ncp-debug.log
@@ -12,3 +15,4 @@ data/sql
 **/*.iml
 **/*.lock
 .idea
+
