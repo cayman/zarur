@@ -47,7 +47,8 @@ api-server:
 web-server:
     build: .
     dockerfile: /client/Dockerfile
-
+    links:
+        - api-server
     ports:
         - "9090:80"
         - "9485-9495:9485-9495"
@@ -60,7 +61,7 @@ web-server:
     environment:
         - ALLOW_OVERRIDE=true
         - HOST_HOSTNAME=brunch-server
-    command: brunch watch --server --port 80
+    command: brunch watch -env proxy --server --port 80
 
 
 proxy:

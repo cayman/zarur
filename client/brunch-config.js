@@ -41,7 +41,13 @@ exports.config = {
     proxy:{
       server: {
         path: 'rest-proxy.js', //use server with rest-proxy
-        stripSlashes: true
+        config: {
+          context:'/api',
+          options: {
+            target: 'http://api-server:9696',
+            changeOrigin: true,
+          }
+        }
       },
 
     }
