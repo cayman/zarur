@@ -6,7 +6,7 @@ public
 data/mysql
 etc/mysql
 
-api/aaplication/.env
+api/application/.env
 
 **/node_modules
 **/vendor
