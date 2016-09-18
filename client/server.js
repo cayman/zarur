@@ -21,16 +21,16 @@ exports.startServer = function(config, callback){
   app.use(config.context, apiProxy);
 
   const index = sysPath.join(config.path, 'index.html');
-  logger.info('Static path:',index);
+  logger.info('static path:',index);
 
   app.all('/*', function(request, response) {
-    return response.sendfile(sysPath.resolve(index));
+    return response.sendFile(sysPath.resolve(index));
   });
 
   const server = http.createServer(app);
 
   server.listen(config.port, config.hostname, callback);
-  logger.info(`application started on http://${config.port}:${config.port}/`);
+  logger.info(`application started on http://${config.hostname}:${config.port}`);
 
   return server;
 };

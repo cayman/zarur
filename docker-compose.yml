@@ -1,5 +1,6 @@
 mysql-db:
     image: mysql
+    hostname: mysql-db
     ports:
       - "3306:3306"
     volumes:
@@ -25,6 +26,7 @@ php-myadmin:
 api-server:
     build: .
     dockerfile: /api/Dockerfile
+    hostname: api-server
     links:
         - mysql-db
     ports:
@@ -34,8 +36,8 @@ api-server:
         - ./api/application:/var/www/application
 #        - ./logs/api:/var/www/logs
         - ./api/etc/php:/usr/local/etc/php
-#        - ./api/etc/apache:/etc/apache2/sites-enabled
-        - ./api/etc/apache/httpd.conf:/etc/apache2/conf-enabled/apache2.conf
+#        - ./api/etc/apache/hosts.conf:/etc/apache2/sites-enabled/000-default.conf
+        - ./api/etc/apache/httpd.conf:/etc/apache2/conf-available/apache2.conf
     environment:
         - ALLOW_OVERRIDE=true
         - DBP_HOST=mysql-db
@@ -47,6 +49,7 @@ api-server:
 web-server:
     build: .
     dockerfile: /client/Dockerfile
+    hostname: web-server
     links:
         - api-server
     ports:
@@ -58,10 +61,11 @@ web-server:
         - ./client/package.json:/usr/client/package.json
         - ./client/.eslintrc.yml:/usr/client/.eslintrc.yml
         - ./client/brunch-config.js:/usr/client/brunch-config.js
+        - ./client/server.js:/usr/client/server.js
     environment:
-        - ALLOW_OVERRIDE=true
-        - HOST_HOSTNAME=brunch-server
-    command: brunch watch -env proxy --server --port 80
+        - PROXY_CONTEXT=/api
+        - PROXY_TARGET=http://api-server
+    command: brunch watch --env proxy --server --port 80
 
 
 proxy:

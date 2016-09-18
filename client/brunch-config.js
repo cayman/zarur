@@ -40,11 +40,11 @@ exports.config = {
     },
     proxy:{
       server: {
-        path: 'rest-proxy.js', //use server with rest-proxy
+        path: 'server.js', //use server with rest-proxy
         config: {
-          context:'/api',
+          context: process.env.PROXY_CONTEXT || '/api',
           options: {
-            target: 'http://api-server:9696',
+            target: process.env.PROXY_TARGET || 'http://localhost:8888',
             changeOrigin: true,
           }
         }
