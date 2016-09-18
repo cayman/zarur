@@ -3,7 +3,7 @@
 
 logs
 public
-data
+data/*
 
 api/application/.env
 

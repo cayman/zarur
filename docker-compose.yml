@@ -4,7 +4,7 @@ mysql-db:
       - "3306:3306"
     volumes:
         - ./data/mysql:/var/lib/mysql
-        - ./etc/mysql:/docker-entrypoint-initdb.d
+        - ./data/script:/docker-entrypoint-initdb.d
     environment:
         - MYSQL_ROOT_PASSWORD=${DBP_ROOT}
         - MYSQL_DATABASE=${DBP_NAME}
@@ -44,7 +44,7 @@ api-server:
         - DBP_PASSWORD=${DBP_PASSWORD}
 
 
-node-brunch:
+web-server:
     build: .
     dockerfile: /client/Dockerfile
 
@@ -66,7 +66,7 @@ node-brunch:
 proxy:
     image: haproxy:1.6
     links:
-        - node-brunch
+        - web-server
         - api-server
     ports:
       - "9000:80"
