@@ -6,7 +6,7 @@ public
 data/mysql
 etc/mysql
 
-application/.etc
+api/aaplication/.env
 
 **/node_modules
 **/vendor

@@ -22,23 +22,22 @@ php-myadmin:
         - MYSQL_ROOT_PASSWORD=${DBP_ROOT}
 
 
-php-server:
+api-server:
     build: .
-    dockerfile: /etc/docker/Dockerfile-php-apache
+    dockerfile: /api/Dockerfile
     links:
         - mysql-db
     ports:
-        - "9000:80"
+        - "9696:80"
     volumes:
-        - ./client/public:/var/www/html
-        - ./application:/var/www/application
-#        - ./logs:/var/www/logs
-        - ./etc/php:/usr/local/etc/php
-#        - ./etc/apache:/etc/apache2/sites-enabled
-        - ./etc/apache/httpd.conf:/etc/apache2/conf-enabled/apache2.conf
+        - ./api/public:/var/www/html
+        - ./api/application:/var/www/application
+#        - ./logs/api:/var/www/logs
+        - ./api/etc/php:/usr/local/etc/php
+#        - ./api/etc/apache:/etc/apache2/sites-enabled
+        - ./api/etc/apache/httpd.conf:/etc/apache2/conf-enabled/apache2.conf
     environment:
         - ALLOW_OVERRIDE=true
-        - APP_PATH=/var/www/application
         - DBP_HOST=mysql-db
         - DBP_NAME=${DBP_NAME}
         - DBP_USER=${DBP_USER}
@@ -47,7 +46,7 @@ php-server:
 
 node-brunch:
     build: .
-    dockerfile: /etc/docker/Dockerfile-brunch
+    dockerfile: /client/Dockerfile
 
     ports:
         - "9090:80"
@@ -68,12 +67,14 @@ proxy:
     image: haproxy:1.6
     links:
         - node-brunch
-        - php-server
+        - api-server
     ports:
-      - "80:8080"
+      - "9000:80"
 
     volumes:
-        - ./etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+        - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
         - ./logs/haproxy:/var/log/haproxy
     environment:
         - ALLOW_OVERRIDE=true
+        - API_PORT=9696
+        - WEB_PORT=9090
