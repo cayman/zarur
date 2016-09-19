@@ -2,8 +2,9 @@
 # Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
 
 logs
-client/public/*
+client/public/*.*
 data/mysql
+data/script/*.*
 
 api/application/.env
 
