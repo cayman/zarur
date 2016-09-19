@@ -9,8 +9,7 @@
         "vlucas/phpdotenv": "~2.0"
     },
     "scripts": {
-        "start": "php -S localhost:8888 -t ../public ../public/index.php",
+        "start": "php -S localhost:8880 -t ../public ../public/index.php",
         "test": "phpunit"
     }
 }
-

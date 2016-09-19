@@ -32,12 +32,12 @@ api-server:
     ports:
         - "9696:80"
     volumes:
-        - ./api/public:/var/www/html
         - ./api/application:/var/www/application
-#        - ./logs/api:/var/www/logs
+        - ./client/public:/var/www/html
         - ./api/etc/php:/usr/local/etc/php
 #        - ./api/etc/apache/hosts.conf:/etc/apache2/sites-enabled/000-default.conf
-        - ./api/etc/apache/httpd.conf:/etc/apache2/conf-available/apache2.conf
+#        - ./api/etc/apache/httpd.conf:/etc/apache2/conf-available/apache2.conf
+#        - ./logs/api:/var/www/logs
     environment:
         - ALLOW_OVERRIDE=true
         - DBP_HOST=mysql-db
@@ -78,7 +78,6 @@ proxy:
 
     volumes:
         - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-        - ./logs/haproxy:/var/log/haproxy
     environment:
         - ALLOW_OVERRIDE=true
         - API_PORT=9696
